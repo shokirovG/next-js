@@ -5,7 +5,7 @@ const NotFound = () => {
   const route = useRouter();
   setTimeout(() => {
     console.log(route);
-    route.push("/contacts");
+    route.push("/");
   }, 2000);
   return <div>hato 404 !</div>;
 };

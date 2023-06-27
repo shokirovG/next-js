@@ -1,40 +1,31 @@
 import { redirects } from "@/next.config";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import NotFound from "./404";
 
-const users = () => {
+//CSR
+const users = ({ data }) => {
   const route = useRouter();
+  
 
-  const [goods, setGoods] = useState([]);
-  const useFetch = async () => {
-    const request = await fetch(`https://jsonplaceholder.typicode.com/todos/`);
-    const data = await request.json();
-    return data;
-  };
-  const data = null;
   if (!data) {
     return NotFound();
   }
-
-  useEffect(() => {
-    data.then((res) => {
-      setGoods(res.slice(0, 20));
-    });
-  }, []);
 
   return (
     <>
       <Head>
         <title>USER</title>
       </Head>
-      {goods &&
-        goods.map(({ id, title }) => (
+      <h1>userlar</h1>
+      {data &&
+        data.map(({ id, name }) => (
           <div key={id}>
-            id:{id}-TITLE: {title}
+            <Link href={`/user/${id}`}>{name}</Link>
           </div>
         ))}
     </>
@@ -42,3 +33,9 @@ const users = () => {
 };
 
 export default users;
+
+export const getStaticProps = async () => {
+  const res = await fetch(`${process.env.API_URL}/api/users`);
+  const data = await res.json();
+  return { props: { data } };
+};
